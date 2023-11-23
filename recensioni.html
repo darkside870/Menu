@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="recensioni.css"/>
+    <title>MENU</title>
+</head>
+<body>
+    <header class="header">
+    <a class="MENU" href="main.html">Menu</a>
+    <nav class="navbar">
+    
+        <a href="main.html">Home</a>
+        <a href="recensioni.html">Recensioni</a>
+        </nav>
+        </header> 
+
+        <h2>Lascia una recensione</h2>
+        <form id="recensioneForm">
+           Nome utente: <input type="text" id="nomeUtente"><br>
+           Recensione: <textarea id="testoRecensione"></textarea><br>
+           <button type="button" onclick="inviaRecensione()">Invia recensione</button>
+        </form>
+
+
+
+        
+<script>
+    function inviaRecensione() {
+       const nomeUtente = document.getElementById('nomeUtente').value;
+       const testoRecensione = document.getElementById('testoRecensione').value;
+ 
+       // Salva la recensione nel database
+       const recensioniRef = database.ref('recensioni');
+       recensioniRef.push({
+          nomeUtente: nomeUtente,
+          testoRecensione: testoRecensione,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+       });
+ 
+       // Pulisci il modulo dopo l'invio
+       document.getElementById('nomeUtente').value = '';
+       document.getElementById('testoRecensione').value = '';
+    }
+ </script>
+ 
+ <h2>Recensioni</h2>
+ <ul id="listaRecensioni"></ul>
+
+</body>
+
+<script>
+    const listaRecensioni = document.getElementById('listaRecensioni');
+    const recensioniRef = database.ref('recensioni');
+ 
+    // Ascolta gli eventi di aggiornamento del database
+    recensioniRef.on('child_added', (snapshot) => {
+       const recensione = snapshot.val();
+       const listItem = document.createElement('li');
+       listItem.innerHTML = `<strong>${recensione.nomeUtente}:</strong> ${recensione.testoRecensione}`;
+       listaRecensioni.appendChild(listItem);
+    });
+ </script>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyDkqMM8UeIHdX-PlzSeqqcH05e_ZwAwhh8",
+      authDomain: "menu-1770d.firebaseapp.com",
+      projectId: "menu-1770d",
+      storageBucket: "menu-1770d.appspot.com",
+      messagingSenderId: "823252780556",
+      appId: "1:823252780556:web:082ca1b9f91f1d31835029",
+      measurementId: "G-Q2916J0XLK"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+
+</html>
